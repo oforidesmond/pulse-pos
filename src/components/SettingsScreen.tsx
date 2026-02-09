@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Printer, CheckCircle, XCircle, Settings, Info } from 'lucide-react';
+import { branding } from '../config/branding';
 
 interface ShopInfo {
   shopName: string;
@@ -10,9 +11,9 @@ interface ShopInfo {
 export default function SettingsScreen() {
   const [printTestStatus, setPrintTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [shopInfo, setShopInfo] = useState<ShopInfo>({
-    shopName: '',
-    address: '',
-    phoneNumber: ''
+    shopName: branding.shopInfoDefaults.shopName,
+    address: branding.shopInfoDefaults.address,
+    phoneNumber: branding.shopInfoDefaults.phoneNumber
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -23,6 +24,12 @@ export default function SettingsScreen() {
       const savedInfo = localStorage.getItem('shopInfo');
       if (savedInfo) {
         setShopInfo(JSON.parse(savedInfo));
+      } else {
+        setShopInfo({
+          shopName: branding.shopInfoDefaults.shopName,
+          address: branding.shopInfoDefaults.address,
+          phoneNumber: branding.shopInfoDefaults.phoneNumber,
+        });
       }
     } catch (error) {
       console.error('Failed to load shop info:', error);
@@ -31,7 +38,7 @@ export default function SettingsScreen() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setShopInfo(prev => ({
+    setShopInfo((prev: ShopInfo) => ({
       ...prev,
       [name]: value
     }));

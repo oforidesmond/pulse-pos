@@ -1,6 +1,7 @@
 import React from 'react';
 import { Printer, ArrowLeft } from 'lucide-react';
 import { Sale, CartItem, formatPaymentMethod } from '../types/sales';
+import { branding, brandGradientStyle } from '../config/branding';
 
 interface ReceiptPreviewProps {
   sale: Sale;
@@ -8,21 +9,6 @@ interface ReceiptPreviewProps {
 }
 
 export default function ReceiptPreview({ sale, onBackToPOS }: ReceiptPreviewProps) {
-  const handlePrint = async () => {
-    if (window.electronAPI?.printReceipt) {
-      try {
-        const ok = await window.electronAPI.printReceipt(sale);
-        if (!ok) {
-          console.error('Electron printReceipt returned false');
-        }
-      } catch (error) {
-        console.error('Electron printReceipt threw error', error);
-      }
-      return;
-    }
-    window.print();
-  };
-
   // Get shop info from localStorage
   const getShopInfo = () => {
     const shopInfoStr = localStorage.getItem('shopInfo');
@@ -34,14 +20,25 @@ export default function ReceiptPreview({ sale, onBackToPOS }: ReceiptPreviewProp
       }
     }
     // Default values if no shop info found
-    return {
-      shopName: 'Sika Ventures',
-      address: 'Texpo Market, Spintex',
-      phoneNumber: '0554492626'
-    };
+    return branding.shopInfoDefaults;
   };
 
   const shopInfo = getShopInfo();
+
+  const handlePrint = async () => {
+    if (window.electronAPI?.printReceipt) {
+      try {
+        const ok = await window.electronAPI.printReceipt({ ...sale, shopInfo } as any);
+        if (!ok) {
+          console.error('Electron printReceipt returned false');
+        }
+      } catch (error) {
+        console.error('Electron printReceipt threw error', error);
+      }
+      return;
+    }
+    window.print();
+  };
 
   return (
     <div className="h-46 bg-gray-50 flex items-center justify-center p-8">
@@ -56,7 +53,8 @@ export default function ReceiptPreview({ sale, onBackToPOS }: ReceiptPreviewProp
           </button>
           <button
             onClick={handlePrint}
-            className="flex-1 flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-2xl hover:from-blue-600 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
+            className="flex-1 flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r text-white rounded-2xl transition-all shadow-lg hover:shadow-xl active:scale-95"
+            style={brandGradientStyle()}
           >
             <Printer className="w-6 h-6" />
             <span>Print Receipt</span>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Lock, User } from 'lucide-react';
+import { branding, brandGradientStyle } from '../config/branding';
 
 interface LoginScreenProps {
   onLogin: () => void;
 }
 
-const LOGIN_API_URL = import.meta.env.VITE_AUTH_API_URL ?? 'https://sika-ventures-admin.vercel.app/api/auth/login';
+const LOGIN_API_URL = import.meta.env.VITE_AUTH_API_URL ?? '/api/auth/login';
 
 export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [username, setUsername] = useState('');
@@ -57,14 +58,14 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center p-8">
+    <div className="h-screen bg-gradient-to-br flex items-center justify-center p-8" style={brandGradientStyle()}>
       <div className="bg-white rounded-3xl shadow-2xl p-12 w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-gradient-to-br from-blue-500 to-teal-500 rounded-3xl p-6 mb-6">
+          <div className="bg-gradient-to-br rounded-3xl p-6 mb-6" style={brandGradientStyle()}>
             <ShoppingCart className="w-16 h-16 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-center mb-2">Sika Ventures POS</h1>
-          <p className="text-gray-500 text-center">Sign in to continue</p>
+          <h1 className="text-center mb-2">{branding.appName}</h1>
+          <p className="text-gray-500 text-center">{branding.appTagline}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -106,13 +107,16 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-blue-500 to-teal-500 text-white py-6 rounded-2xl hover:from-blue-600 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+            className="w-full bg-gradient-to-r text-white py-6 rounded-2xl transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+            style={brandGradientStyle()}
           >
             {isSubmitting ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 
-        <p className="text-center text-gray-400 mt-8 text-sm">Version 1.0.0</p>
+        {branding.appVersionLabel ? (
+          <p className="text-center text-gray-400 mt-8 text-sm">{branding.appVersionLabel}</p>
+        ) : null}
       </div>
     </div>
   );

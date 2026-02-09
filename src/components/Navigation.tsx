@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShoppingCart, History, Cloud, Settings, LogOut } from 'lucide-react';
 import { Screen } from '../App';
+import { branding, brandGradientStyle } from '../config/branding';
 
 interface NavigationProps {
   currentScreen: Screen;
@@ -21,10 +22,10 @@ export default function Navigation({ currentScreen, onNavigate, onLogout }: Navi
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-blue-500 to-teal-500 rounded-2xl p-3">
+            <div className="bg-gradient-to-br rounded-2xl p-3" style={brandGradientStyle()}>
               <ShoppingCart className="w-7 h-7 text-white" strokeWidth={2.5} />
             </div>
-            <h2 className="text-gray-800">Sika Ventures POS</h2>
+            <h2 className="text-gray-800">{branding.appName}</h2>
           </div>
           
           <div className="flex gap-2 ml-8">
@@ -37,9 +38,10 @@ export default function Navigation({ currentScreen, onNavigate, onLogout }: Navi
                   onClick={() => onNavigate(item.id)}
                   className={`flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-blue-500 to-teal-500 text-white shadow-lg'
+                      ? 'bg-gradient-to-r text-white shadow-lg'
                       : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                   }`}
+                  style={isActive ? brandGradientStyle() : undefined}
                 >
                   <Icon className="w-5 h-5" strokeWidth={2.5} />
                   <span>{item.label}</span>

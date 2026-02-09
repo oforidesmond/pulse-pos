@@ -91,14 +91,19 @@ function buildEscPosReceipt(sale) {
     }
   };
 
+  const shopInfo = (sale && sale.shopInfo) || {};
+  const shopName = shopInfo.shopName ? String(shopInfo.shopName) : '';
+  const shopAddress = shopInfo.address ? String(shopInfo.address) : '';
+  const shopPhone = shopInfo.phoneNumber ? String(shopInfo.phoneNumber) : '';
+
   buffers.push(Buffer.from([ESC, 0x40]));
 
   buffers.push(setAlign(1));
   buffers.push(setTextSize(2, 2));
-  buffers.push(line('Sika Ventures'));
+  if (shopName) buffers.push(line(shopName));
   buffers.push(setTextSize(1, 1));
-  buffers.push(line('Texpo Market, Spintex'));
-  buffers.push(line('Phone: 0554492626'));
+  if (shopAddress) buffers.push(line(shopAddress));
+  if (shopPhone) buffers.push(line(`Phone: ${shopPhone}`));
   buffers.push(line());
 
   buffers.push(setAlign(0));

@@ -1,7 +1,7 @@
 import { getPendingSales, markSaleSynced } from '../storage/offlineSales';
 import type { Sale } from '../types/sales';
 
-const SALES_API_URL = import.meta.env.VITE_SALES_API_URL ?? 'https://sika-ventures-admin.vercel.app/api/sales';
+const SALES_API_URL = import.meta.env.VITE_SALES_API_URL ?? '/api/sales';
 
 export interface SalesSyncResult {
   total: number;
